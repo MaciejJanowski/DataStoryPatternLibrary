@@ -256,7 +256,6 @@ class DataStoryPatterns():
             dataframe["DiffMin"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
             return dataframe
 
-
     def ProfileOutliers(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(), displayType="outliers_only"):
         """
         ProfileOutliers - detection of unusual values within data (anomalies)
@@ -302,3 +301,100 @@ class DataStoryPatterns():
             return noOutliers
 
     def ExternalComparison(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dims_to_compare=[],meas_to_compare="",comp_type=""):
+        """
+        ExternalComparison - comparison of numeric values related to textual values within multiple columns
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dims_to_compare: list[str]
+            dimensions, which textual values are bound to be investigated
+        meas_to_compare: str
+            measure(numeric column), which values related to dim_to_compare 
+            will be processed
+        comp_type: str
+            type of comparison to be performed
+        ...
+        Output
+        -----------
+        Independent from comp_type selected, output data will have additional column with numerical
+        column processed in specific way.
+        Available comparison types (comp_type):
+            diffmax->difference with max value related to specific textual values
+            diffmean->difference with arithmetic mean related to specific textual values
+            diffmin->difference with minimum value related to specific textual values
+
+        """
+        
+        if(df.empty):
+            dataframe=self.retrieveData(cube,dims,meas,hierdims)
+        else:
+            dataframe=df
+        
+        if len(dims_to_compare)!=2:
+            return -1
+        
+        if(comp_type=="sum"):
+            return dataframe.groupby(dims_to_compare)[meas_to_compare].sum(axis=1)
+        elif(comp_type=="diffmax"):
+            dataframe["DiffMax("+str(dims_to_compare).strip("[]")+")"]=dataframe.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+            return dataframe
+        elif(comp_type=="diffavg"):
+            dataframe["DiffAvg("+str(dims_to_compare).strip("[]")+")"]=dataframe.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+            return dataframe
+        elif(comp_type=="diffmin"):
+            dataframe["DiffMin("+str(dims_to_compare).strip("[]")+")"]=dataframe.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+            return dataframe
+            
+    def DissectFactors(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_dissect=""):
+        """
+        DissectFactors - decomposition of data based on values in dim_to_dissect
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dim_to_dissect: str
+            dimension, based on which input data will be decomposed
+        ...
+        Output
+        -----------
+        As an output, data will be decomposed in a form of a dictionary, where each 
+        subset have values only related to specific value
+        """
+        
+        if(df.empty):
+            dataframe=self.retrieveData(cube,dims,meas,hierdims)
+        else:
+            dataframe=df
+        
+        uniqueDimValues=dataframe[dim_to_dissect].unique()
+        #dictionary based on unique values from dimension
+        dimValueDFDict={elem : pd.DataFrame for elem in uniqueDimValues}
+
+        #decompose data into subset grouped under dim_to_dissect
+        for key in dimValueDFDict.keys():
+            dimValueDFDict[key]=dataframe[:][dataframe[dim_to_dissect] == key]
+
+        return dimValueDFDict
