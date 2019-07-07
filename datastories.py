@@ -400,7 +400,7 @@ class DataStoryPatterns():
         return dimValueDFDict
 
 
-    zdef HighlightContrast(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
+    def HighlightContrast(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
         """
         HighlightContrast - partial difference within values related to one textual column
         ...
@@ -446,5 +446,118 @@ class DataStoryPatterns():
         elif(contrast_type=="partofmin"):
             dataframe["PartOfMin"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
             return dataframe
+
+
+    def StartBigDrillDown(self,cube=[],dims=[],meas=[],df=pd.DataFrame(),hierdim_drill_down=[]):
+        if not (cube and dims and meas and hierdim_drill_down):
+            return -1
+        for el in hierdim_drill_down:
+            hierdimLevels=sorted(hierdim_drill_down[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get)
+            hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
+            for dimlevel in hierdimDict.keys():
+                hierdims={el:{"selected_level":dimlevel}}
+                hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
+        
+
+        return hierdimDict
+
+    
+    def StartSmallZoomOut(self,cube=[],dims=[],meas=[],df=pd.DataFrame(),hierdim_zoom_out=[]):
+        if not (cube and dims and meas and hierdim_zoom_out):
+            return -1
+        for el in hierdim_zoom_out:
+            hierdimLevels=sorted(hierdim_zoom_out[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get, reverse=True)
+            hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
+            for dimlevel in hierdimDict.keys():
+                hierdims={el:{"selected_level":dimlevel}} ###data retrival per each heirarchy level
+                hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
+        
+
+        return hierdimDict
+
+
+###Dicitonary of Data analysis per uniquue value
+    def AnalysisByCategory(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_for_category="",meas_to_analyse="",analysis_type="min"):
+        if(df.empty):
+            dataframe=self.retrieveData(cube,dims,meas,hierdims)
+        else:
+            dataframe=df
+        
+        if not (dim_for_category): ##If not specified
+            dim_for_category=dims[0]
+
+        uniqueDimValues=dataframe[dim_for_category].unique()
+
+        analysisDict={elem:{analysis_type:0} for elem in uniqueDimValues}
+
+        if(analysis_type=="min"):
+            for dimvalue in uniqueDimValues:
+                tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].min()
+                
+            return analysisDict
+        
+        if(analysis_type=="max"):
+            for dimvalue in uniqueDimValues:
+                tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].max()
+                
+            return analysisDict
+        
+        elif(analysis_type=="mean"):
+            for dimvalue in uniqueDimValues:
+                tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].mean()
+                
+            return analysisDict
+
+        elif(analysis_type=="sum"):
+            for dimvalue in uniqueDimValues:
+                tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].sum()
+                
+            return analysisDict
+
+    
+    def NarrChangeOT(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate=[],narr_type=""):
+        if(df.empty):
+            dataframe=self.retrieveData(cube,dims,meas,hierdims)
+        else:
+            dataframe=df
+        
+        if len(meas_to_narrate) != 2: #there has to be two measures 
+            return -1
+        dataframe["Population15OrOver1"]=dataframe["Population15OrOver"]+10000 ###TEST LINE TO BE REMOVED
+
+        if (narr_type=="percchange"): #percentage change
+            dataframe["PercChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])/dataframe[meas_to_narrate[0]] *100).round(2)
+            return dataframe
+        elif(narr_type=="diffchange"): ##Numeric difference
+            dataframe["DiffChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])).round(2)
+            return dataframe
+
+        
+
+
+
+    def ExploreIntersection(self, dim_to_explore="", hierdim_to_explore=""):
+        if(dim_to_explore):
+            cubesToRetrieveData=self.getOccurencesOfDim(dim_to_explore)
+        elif(hierdim_to_explore):
+            cubesToRetrieveData=self.getOccurencesOfDim(hierdim_to_explore)
+        
+        cubesIntersectDataDict={cube : pd.DataFrame for cube in cubesToRetrieveData}
+
+        for cube in cubesToRetrieveData:
+            dimensions=self.metaDataDict[cube]["dimensions"].keys()
+            #hierdimensions={hierdim: {"selected_level":""} for hierdim in self.metaDataDict[cube]["hierarchical_dimensions"].keys()}
+            measures=self.metaDataDict[cube]["measures"].keys()
+
+            cubesIntersectDataDict[cube]=self.retrieveData(cube,dimensions,measures)
+
+
+        return cubesIntersectDataDict
+
+
 
 
