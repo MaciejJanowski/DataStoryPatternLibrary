@@ -8,10 +8,9 @@ from scipy import stats
 
 class DataStoryPatterns():
 
-    def __init__(self,sparqlEndpoint,metadatafile):
+    def __init__(self,sparqlEndpoint,jsonmetadata):
         self.sparqlEndpoint=sparqlEndpoint
-        metadatafile=open(metadatafile).read()
-        self.metaDataDict=json.loads(metadatafile)
+        self.metaDataDict=jsonmetadata
 
     def retrieveData(self,cube,dims,meas,hierdims=[]):
         """
