@@ -8,7 +8,7 @@ except ImportError:
     from pip.req import parse_requirements
 
 def load_requirements(fname):
-    reqs = parse_requirements(fname)
+    reqs = parse_requirements(fname,session="hack")
     return [str(ir.req) for ir in reqs]
 
 

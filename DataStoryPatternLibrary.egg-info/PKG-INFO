@@ -1,0 +1,12 @@
+Metadata-Version: 1.0
+Name: DataStoryPatternLibrary
+Version: 0.1
+Summary: Data Story Pattern Analysis for LOSD
+Home-page: https://github.com/MaciejJanowski/DataStoryPatternLibrary
+Author: Maciej Janowski
+Author-email: maciej.janowski@insight-centre.org
+License: MIT
+Description: # DataStoryPatternLibrary
+        DataStorytelling Patterns developed as a part of Master Thesis Research
+        
+Platform: UNKNOWN
