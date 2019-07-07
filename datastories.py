@@ -356,7 +356,7 @@ class DataStoryPatterns():
         elif(comp_type=="diffmin"):
             dataframe["DiffMin("+str(dims_to_compare).strip("[]")+")"]=dataframe.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
             return dataframe
-            
+
     def DissectFactors(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_dissect=""):
         """
         DissectFactors - decomposition of data based on values in dim_to_dissect
@@ -398,3 +398,53 @@ class DataStoryPatterns():
             dimValueDFDict[key]=dataframe[:][dataframe[dim_to_dissect] == key]
 
         return dimValueDFDict
+
+
+    zdef HighlightContrast(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
+        """
+        HighlightContrast - partial difference within values related to one textual column
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dim_to_contrast: str
+            textual column, from which values will be contrasted
+        meas_to_contrast: str
+            numerical column, which values are contrasted
+        contrast_type: str
+            type of contrast to present
+
+        ...
+        Output
+        -----------
+        Output data will have additional column with contrast presented.
+        """
+        
+        
+        if(df.empty):
+            dataframe=self.retrieveData(cube,dims,meas,hierdims)
+        else:
+            dataframe=df
+        
+        if(contrast_type=="partofwhole"):
+            dataframe["PartOfWhole"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.sum()).round(2)
+            return dataframe
+        elif(contrast_type=="partofmax"):
+            dataframe["PartOfMax"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.max()).round(2)
+            return dataframe
+        elif(contrast_type=="partofmin"):
+            dataframe["PartOfMin"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
+            return dataframe
+
+
