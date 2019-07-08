@@ -117,47 +117,6 @@ class DataStoryPatterns():
         elif(count_type=="count"):
             return dataframe.count()
 
-     def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
-        """
-        LeagueTable - sorting and extraction specific amount of records
-        ...
-        Attributes
-        -------------
-        cube: str
-            Cube to retrieve data
-        dims: list[str]
-            list of Strings (dimension names) to retrieve
-        meas: list[str]
-            list of measures to retrieve
-        hierdims: dict{hierdim:{"selected_level":[value]}}
-            hierarchical dimension (if provided) to retrieve data from specific
-            hierarchical level
-        columns_to_order: list[str]
-            columns within data to sort by
-        order_type: str
-            type of order to apply (asc/desc)
-        number_of_records: integer
-            amount of records to return
-        df: dataframe
-            if data is already retrieved from SPARQL endpoint, dataframe itself can
-            be provided
-        ...
-        Output
-        ------------
-        Depending on sort_type
-            asc-> ascending order based on columns provided in columns_to_order
-            desc-> descending order based on columns provided in columns_to_order
-            Amount of records returned will be equal to number_of_records
-        """
-        if(df.empty):
-            dataframe=self.retrieveData(cube,dims,meas,hierdims)
-        else:
-            dataframe=df
-        if(order_type=="asc"):
-            return dataframe.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
-        elif(order_type=="desc"):
-            return dataframe.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
-
     def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
         LeagueTable - sorting and extraction specific amount of records
