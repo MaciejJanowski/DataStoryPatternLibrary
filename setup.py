@@ -12,8 +12,8 @@ def load_requirements(fname):
     return [str(ir.req) for ir in reqs]
 
 
-setup(name='DataStoryPatternLibrary',
-      version='0.1',
+setup(name='DataStoryPattern',
+      version='0.1.1',
       url='https://github.com/MaciejJanowski/DataStoryPatternLibrary',
       license='MIT',
       author='Maciej Janowski',
