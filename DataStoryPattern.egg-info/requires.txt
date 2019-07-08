@@ -1,7 +1,0 @@
-SPARQLWrapper
-itertools
-sparql_dataframe
-pandas
-json
-numpy
-scipy

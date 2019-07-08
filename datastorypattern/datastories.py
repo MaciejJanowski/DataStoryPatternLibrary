@@ -1,8 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, SPARQLWrapper2, JSON, JSONLD, CSV, TSV, N3, RDF, RDFXML, TURTLE
-import itertools 
 import sparql_dataframe
 import pandas as pd
-import json
 import numpy as np
 from scipy import stats
 
