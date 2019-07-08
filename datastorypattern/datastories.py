@@ -118,7 +118,7 @@ class DataStoryPatterns():
         elif(count_type=="count"):
             return dataframe.count()
 
-     def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
+    def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
         LeagueTable - sorting and extraction specific amount of records
         ...
