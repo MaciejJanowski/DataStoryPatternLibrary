@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='datastories',
-      version='0.1.1.5',
+      version='0.1.1.6',
       url='https://github.com/MaciejJanowski/DataStoryPatternLibrary',
       license='MIT',
       author='Maciej Janowski',
