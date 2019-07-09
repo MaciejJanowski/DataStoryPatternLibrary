@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 from scipy import stats
 
-class DataStoryPatterns():
+
+class DataStoryPatternLibrary():
 
     def __init__(self,sparqlEndpoint,jsonmetadata):
         self.sparqlEndpoint=sparqlEndpoint

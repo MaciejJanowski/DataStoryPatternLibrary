@@ -1,10 +1,10 @@
 README.md
 setup.py
+DataStoryPatternLibrary/DataStoryPatternLibrary.py
+DataStoryPatternLibrary/__init__.py
 DataStoryPatternLibrary.egg-info/PKG-INFO
 DataStoryPatternLibrary.egg-info/SOURCES.txt
 DataStoryPatternLibrary.egg-info/dependency_links.txt
 DataStoryPatternLibrary.egg-info/not-zip-safe
 DataStoryPatternLibrary.egg-info/requires.txt
 DataStoryPatternLibrary.egg-info/top_level.txt
-datastorypattern/__init__.py
-datastorypattern/datastories.py

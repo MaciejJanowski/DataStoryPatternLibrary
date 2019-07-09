@@ -1,1 +1,1 @@
-datastorypattern
+DataStoryPatternLibrary
