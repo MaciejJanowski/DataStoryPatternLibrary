@@ -46,18 +46,14 @@ Requirements will be automatically installe
 ### Output
 Based on count_type value
 
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-Count_type                |  Description   |	
-  | :------------------------ | :-------------|
-  | raw| data without any analysis performed
-  | sum| sum across all numeric columns
-  | mean| mean across all numeric columns
-  | min| minimum values from all numeric columns
-  | max| maximum values from all numeric columns
-  | count| amount of records
+|Count_type                |  Description   |	
+  | ------------------------ | -------------|
+  | raw| data without any analysis performed|
+  | sum| sum across all numeric columns|
+  | mean| mean across all numeric columns|
+  | min| minimum values from all numeric columns|
+  | max| maximum values from all numeric columns|
+  | count| amount of records|
 
 
 # LTable
