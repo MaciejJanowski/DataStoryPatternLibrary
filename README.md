@@ -3,16 +3,25 @@
 Data Story Patterns Library is a repository with pattern analysis designated for Linked Open Statistical Data. Story Patterns were retrieved from literture reserach udenr general subject of "data journalism".
 
 ### Installation
-```sh
+```python
 pip install datastories
 ```
-Requirements will be automatically installe
+Requirements will be automatically installed with package
+
+###Import/Usage 
+```python
+import datastories.analytical as patterns
+
+patterns.DataStoryPattern(sparqlendpointurl, jsonmetadata)
+```
+Object created allow to query SPARQL endpoint based on JSON meatadat provided
  
 
 # Patterns Description
 <!--ts-->
    * [Measurement and Counting](#MCounting)
    * [League Table](#LTable)
+   * [Internal Comprison](#InternalComparison)
 <!--te-->
 # MCounting
 
@@ -71,4 +80,35 @@ Based on sort_type value
   | ------------------------ | -------------|
   | asc|ascending order based on columns provided in ```columns_to_order```|
   | desc|descending order based on columns provided in ```columns_to_order```|
+
+
+# InternalComparison
+
+  InternalComparison - comparison of numeric values related to textual values within one column
+    
+### Attributes
+ ```python
+ def InternalComparison(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), dim_to_compare="",meas_to_compare="",comp_type=""):
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | dim_to_compare	       |	```String```         | Dimension, which values will be investigated
+  | meas_to_compare	       |	```String```         | Measure, which numeric values related to ```dim_to_compare``` will be processed
+  | comp_type	       |	```String```         | Type of comparison to perform
  
+### Output
+Independent from ```comp_type``` selected, output data will have additional column with numerical column ```meas_to_compare``` processed in specific way.
+
+Available types of comparison ```comp_type```
+|Comp_type                |  Description   |	
+  | ------------------------ | -------------|
+  | diffmax| difference with max value related to specific textual value|
+  | diffmean| difference with arithmetic mean related to specific textual values|
+  | diffmin|difference with minimum value related to specific textual value|
+
+
