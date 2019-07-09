@@ -6,14 +6,14 @@ import json
 import numpy as np
 from scipy import stats
 
-class DataStoryPatterns():
+class DataStoryPatternLibrary():
 
     def __init__(self,sparqlEndpoint,jsonmetadata):
         self.sparqlEndpoint=sparqlEndpoint
         self.metaDataDict=jsonmetadata
 
     def retrieveData(self,cube,dims,meas,hierdims=[]):
-        """
+        __doc__="""
         retrieveData - SPARQL query builder to retrieve data from SPARQL endpoint.
    
         ...
@@ -70,7 +70,7 @@ class DataStoryPatterns():
         return sparqldata
 
     def MeasurentCounting(self,cube=[],dims=[],meas=[],hierdims=[],count_type="raw",df=pd.DataFrame() ): 
-        """
+        __doc__="""
         MeasurementCounting - arithemtical operators applied to whole dataset
         ...
         Attributes
@@ -117,8 +117,8 @@ class DataStoryPatterns():
         elif(count_type=="count"):
             return dataframe.count()
 
-     def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
-        """
+    def LeagueTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
+        __doc__="""
         LeagueTable - sorting and extraction specific amount of records
         ...
         Attributes
