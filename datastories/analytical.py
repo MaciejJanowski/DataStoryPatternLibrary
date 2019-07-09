@@ -122,7 +122,7 @@ class DataStoryPattern():
         else:
             raise ValueError("Wrong type of count! :"+count_type)
 
-    def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
+    def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order=[], order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
         LTable -> LeagueTable - sorting and extraction specific amount of records
         ...

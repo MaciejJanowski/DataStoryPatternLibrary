@@ -47,12 +47,12 @@ Requirements will be automatically installe
 Based on count_type value
  Count_type                 | Description   |	
   | :------------------------ | :-------------|
-  | raw| data without any analysis performed|
-  | sum| sum across all numeric columns|
-  | mean| mean across all numeric columns|
-  | min| minimum values from all numeric columns|
-  | max| maximum values from all numeric columns|
-  | count| amount of records|
+  | raw| data without any analysis performed
+  | sum| sum across all numeric columns
+  | mean| mean across all numeric columns
+  | min| minimum values from all numeric columns
+  | max| maximum values from all numeric columns
+  | count| amount of records
 
 
 # LTable
