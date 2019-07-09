@@ -46,7 +46,7 @@ Requirements will be automatically installe
 ### Output
 Based on count_type value
  Count_type                 | Description   |	
-  | :------------------------ | :-------------|
+  | ------------------------ | -------------|
   | raw| data without any analysis performed
   | sum| sum across all numeric columns
   | mean| mean across all numeric columns
