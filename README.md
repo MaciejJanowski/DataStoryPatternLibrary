@@ -77,8 +77,8 @@ Based on count_type value
  
 ### Output
 Based on sort_type value
- Count_type                 | Description   	
-  | :------------------------ | :-------------|
+ |Count_type                 | Description  | 	
+  | ------------------------ | -------------|
   | asc|ascending order based on columns provided in ```columns_to_order```|
-  | desc|descending order based on columns provided in ```columns_to_order```||
+  | desc|descending order based on columns provided in ```columns_to_order```|
  
