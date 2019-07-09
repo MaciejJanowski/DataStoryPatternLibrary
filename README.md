@@ -45,6 +45,11 @@ Requirements will be automatically installe
  
 ### Output
 Based on count_type value
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
 Count_type                |  Description   |	
   | :------------------------ | :-------------|
   | raw| data without any analysis performed
