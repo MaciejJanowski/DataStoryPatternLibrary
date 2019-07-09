@@ -171,7 +171,7 @@ class DataStoryPattern():
 
 
 
-        def InternalComparison(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(), dim_to_compare="",meas_to_compare="",comp_type=""):
+    def InternalComparison(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(), dim_to_compare="",meas_to_compare="",comp_type=""):
         """
         InternalComparison - comparison of numeric values related to textual values within one column
         ...
