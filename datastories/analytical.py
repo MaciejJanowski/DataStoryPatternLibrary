@@ -68,7 +68,7 @@ class DataStoryPattern():
 
         return sparqldata
 
-    def MCounting(self,cube=[],dims=[],meas=[],hierdims=[],count_type="raw",df=pd.DataFrame() ): 
+    def MCounting(self,cube="",dims=[],meas=[],hierdims=[],count_type="raw",df=pd.DataFrame() ): 
         """
         MCounting -> MeasurementCounting - arithemtical operators applied to whole dataset
         ...
@@ -122,7 +122,7 @@ class DataStoryPattern():
         else:
             raise ValueError("Wrong type of count! :"+count_type)
 
-    def LTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
+    def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
         LTable -> LeagueTable - sorting and extraction specific amount of records
         ...
@@ -167,7 +167,7 @@ class DataStoryPattern():
         elif(order_type=="desc"):
             return dataframe.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
         else:
-            raise ValueError("Wrong parameter given: "+order_type)
+            raise ValueError("Wrong order type: "+order_type)
 
 
 
