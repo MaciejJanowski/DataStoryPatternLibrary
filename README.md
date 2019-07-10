@@ -357,6 +357,7 @@ Pattern will return series of datasets, where each will represent occurence of `
 Independent from ```narr_type``` selected, output data will have additional column with numerical values processed in specific way.
 
 Available types of analysis ```narr_type```
+
 |Narr_type                |  Description   |	
   | ------------------------ | -------------|
   | percchange| Percentage change between first nad second property|
