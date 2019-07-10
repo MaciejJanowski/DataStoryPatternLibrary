@@ -106,21 +106,23 @@ class DataStoryPattern():
                 dataframe=df
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
-
-        if(count_type=="raw"):
-            return dataframe
-        elif(count_type=="sum"):
-            return dataframe.sum(axis=1, skipna=True)
-        elif(count_type=="mean"):
-            return dataframe.mean(numeric_only=True)
-        elif(count_type=="min"):
-            return dataframe.min(numeric_only=True)
-        elif(count_type=="max"):
-            return dataframe.max(numeric_only=True)
-        elif(count_type=="count"):
-            return dataframe.count()
-        else:
-            raise ValueError("Wrong type of count! :"+count_type)
+        try:
+            if(count_type=="raw"):
+                return dataframe
+            elif(count_type=="sum"):
+                return dataframe.sum(axis=1, skipna=True)
+            elif(count_type=="mean"):
+                return dataframe.mean(numeric_only=True)
+            elif(count_type=="min"):
+                return dataframe.min(numeric_only=True)
+            elif(count_type=="max"):
+                return dataframe.max(numeric_only=True)
+            elif(count_type=="count"):
+                return dataframe.count()
+            else:
+                raise ValueError("Wrong type of count! :"+count_type)
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis:" +e)
 
     def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order=[], order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
@@ -161,13 +163,15 @@ class DataStoryPattern():
                 dataframe=df
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
-       
-        if(order_type=="asc"):
-            return dataframe.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
-        elif(order_type=="desc"):
-            return dataframe.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
-        else:
-            raise ValueError("Wrong order type: "+order_type)
+        try:
+            if(order_type=="asc"):
+                return dataframe.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
+            elif(order_type=="desc"):
+                return dataframe.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
+            else:
+                raise ValueError("Wrong order type: "+order_type)
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis:"+e)
 
 
 
@@ -219,20 +223,125 @@ class DataStoryPattern():
                 dataframe=df
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
+        try:
+            if(comp_type=="sum"):
+                return dataframe.groupby(dim_to_compare)[meas_to_compare].sum(axis=1)
+            elif(comp_type=="diffmax"):
+                dataframe["DiffMax"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+                return dataframe
+            elif(comp_type=="diffmean"):
+                dataframe["DiffMean"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+                return dataframe
+            elif(comp_type=="diffmin"):
+                dataframe["DiffMin"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+                return dataframe
+            else:
+                raise ValueError("Wrong type of comparison selected!: "+comp_type)
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis: "+e)
 
-        if(comp_type=="sum"):
-            return dataframe.groupby(dim_to_compare)[meas_to_compare].sum(axis=1)
-        elif(comp_type=="diffmax"):
-            dataframe["DiffMax"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
-            return dataframe
-        elif(comp_type=="diffmean"):
-            dataframe["DiffMean"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
-            return dataframe
-        elif(comp_type=="diffmin"):
-            dataframe["DiffMin"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
-            return dataframe
-        else:
-            raise ValueError("Wrong type of comparison selected!: "+comp_type)
+
+    def ProfileOutliers(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), displayType="outliers_only"):
+        """
+        ProfileOutliers - detection of unusual values within data (anomalies)
+        ....
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        displayType: str
+            what values are bound to be displayed
+        ...
+        Output
+        -----------
+        Based on displayType
+            outliers_only->returns rows from dataset where unusual values 
+                            were detected
+            without_outliers->returns dataset with excluded rows where unusual 
+                            values were detecetd
+        
+        """
+        try:
+            if(df.empty):
+                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+            else:
+                dataframe=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+e)
+        
+        try:
+            noOutliers=dataframe[(np.abs(stats.zscore(dataframe.select_dtypes(exclude=["object"]))) < 3).all(axis=1)]
+
+            outliersDF=pd.concat([dataframe,noOutliers]).drop_duplicates(keep=False, inplace=False)
+            
+            if(displayType=="outliers_only"):
+                return outliersDF
+            elif(displayType=="without_outliers"):
+                return noOutliers
+            else:
+                raise ValueError("Wrong display Type:"+ displayType)
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis: " + e)
+
+
+    def DissectFactors(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_dissect=""):
+        """
+        DissectFactors - decomposition of data based on values in dim_to_dissect
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dim_to_dissect: str
+            dimension, based on which input data will be decomposed
+        ...
+        Output
+        -----------
+        As an output, data will be decomposed in a form of a dictionary, where each 
+        subset have values only related to specific value
+        """
+        
+        try:
+            if(df.empty):
+                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+            else:
+                dataframe=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+e)
+        
+        try:
+            uniqueDimValues=dataframe[dim_to_dissect].unique()
+            #dictionary based on unique values from dimension
+            dimValueDFDict={elem : pd.DataFrame for elem in uniqueDimValues}
+
+            #decompose data into subset grouped under dim_to_dissect
+            for key in dimValueDFDict.keys():
+                dimValueDFDict[key]=dataframe[:][dataframe[dim_to_dissect] == key]
+
+            return dimValueDFDict
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis:"+e)
+
 
     
 

@@ -22,6 +22,7 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided
    * [Measurement and Counting](#MCounting)
    * [League Table](#LTable)
    * [Internal Comprison](#InternalComparison)
+   * [Profile Outliers](#ProfileOutliers)
 <!--te-->
 # MCounting
 
@@ -76,7 +77,7 @@ Based on count_type value
 ### Output
 Based on sort_type value
 
-|Count_type                |  Description   |	
+|Sort_type                |  Description   |	
   | ------------------------ | -------------|
   | asc|ascending order based on columns provided in ```columns_to_order```|
   | desc|descending order based on columns provided in ```columns_to_order```|
@@ -88,7 +89,7 @@ Based on sort_type value
     
 ### Attributes
  ```python
- def InternalComparison(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), dim_to_compare="",meas_to_compare="",comp_type=""):
+ def InternalComparison(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), dim_to_compare="",meas_to_compare="",comp_type="")
  ```
   Parameter                 | Type       | Description   |	
   | :------------------------ |:-------------:| :-------------|
@@ -101,7 +102,7 @@ Based on sort_type value
   | meas_to_compare	       |	```String```         | Measure, which numeric values related to ```dim_to_compare``` will be processed
   | comp_type	       |	```String```         | Type of comparison to perform
  
-### Output
+### Output 
 Independent from ```comp_type``` selected, output data will have additional column with numerical column ```meas_to_compare``` processed in specific way.
 
 Available types of comparison ```comp_type```
@@ -111,4 +112,54 @@ Available types of comparison ```comp_type```
   | diffmean| difference with arithmetic mean related to specific textual values|
   | diffmin|difference with minimum value related to specific textual value|
 
+# ProfileOutliers
+
+  ProfileOutliers - detection of unusual values within data (anomalies)
+    
+### Attributes
+ ```python
+ def ProfileOutliers(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(), displayType="outliers_only")
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | displayType	       |	```String```         | What information display are bound to display (with/without anomalies)
+
+### Output 
+Pattern analysis using ```python scipy``` library will perform quick exploration in serach of unusual values within data.
+
+Based on ```displayType``` parameter data will be displayed with/without ddetected unusual values.
+
+Available types of displaying ```displayType```
+|DisplayType                |  Description   |	
+  | ------------------------ | -------------|
+  | outliers_only| returns rows from dataset where unusual values were detected|
+  | without_outliers| returns dataset with excluded rows where unusual values were detected|
+
+
+# DissectFactors
+
+  DissectFactors - decomposition of data based on values in dim_to_dissect
+    
+### Attributes
+ ```python
+ def DissectFactors(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_dissect="")
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | dim_to_dissect	       |	```String```         | Based on which dimension data should be decomposed
+
+### Output 
+As an output, data will be decomposed in a form of a dictionary, where each subset have values only related to specific value.
+Dictionary of subdataset will be constructed as a series of paiers where key per each susbet will values from ```dim_to_dissect```
+and this key value will be data, where yhis key value was occurring.
 

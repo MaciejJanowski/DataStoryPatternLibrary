@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 
 setup(name='datastories',
-      version='0.1.1.6',
+      version='0.1.1.8',
       url='https://github.com/MaciejJanowski/DataStoryPatternLibrary',
       license='MIT',
       author='Maciej Janowski',
@@ -16,4 +16,5 @@ setup(name='datastories',
                         'sparql_dataframe','pandas',
                         'numpy','scipy'],
       long_description=open('README.md').read(),
+      long_description_content_type='text/markdown',
       zip_safe=False)
