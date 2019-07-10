@@ -14,7 +14,49 @@ import datastories.analytical as patterns
 
 patterns.DataStoryPattern(sparqlendpointurl, jsonmetadata)
 ```
-Object created allow to query SPARQL endpoint based on JSON meatadat provided
+Object created allow to query SPARQL endpoint based on JSON meatadat provided.
+
+### JSON Template
+```json
+{
+    "cube_key" : {
+		"title":"title of cube",
+		"dataset_structure":"URI for cube structure",
+        "dimensions":{
+            "dimension_key":{
+                "dimension_title":"Title of diemnsion",
+                "dimension_url":"URI for dimension",
+                "dimension_prefix":"URI for dimension's values"
+            },
+            "dimension_key":{
+                "dimension_title":"Title of diemnsion",
+                "dimension_url":"URI for dimension",
+                "dimension_prefix":"URI for dimension's values"
+            }
+		},
+		"hierarchical_dimensions":{
+			"dimension_key":{
+                "dimension_title":"Title of diemnsion",
+                "dimension_url":"URI for dimension",
+                "dimension_prefix":"URI for dimension's values",
+				"dimension_levels":
+				{
+					"level_key":"integer(granularity level)",
+					"level_key":"integer(granularity level)"
+
+				}
+			}
+		},
+		"measures":{
+			"measure_key":{
+			"measure_title":"Title of measure",
+			"measure_url":"URI for measure"
+			}
+
+		}
+    }
+}
+```
  
 
 # Patterns Description

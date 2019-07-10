@@ -13,28 +13,7 @@ class DataStoryPattern():
 
     def retrieveData(self,cube,dims,meas,hierdims=[]):
         """
-        retrieveData - SPARQL query builder to retrieve data from SPARQL endpoint.
-   
-        ...
-
-        Attributes
-        --------------
-
-        cube: str
-            Cube to retrieve data
-        dims: list[str]
-            list of Strings (dimension names) to retrieve
-        meas: list[str]
-            list of measures to retrieve
-        hierdims: dict{hierdim:{"selected_level":[value]}}
-            hierarchical dimension (if provided) to retrieve data from specific
-            hierarchical level
-        
-        ...
-        Output
-        ------------
-        Pandas Dataframe 
-
+        HELPER FUNCTION NOT STORY PATTERN
         """
         skosInSchemeString="<http://www.w3.org/2004/02/skos/core#inScheme>"
         queryString=""
@@ -610,7 +589,7 @@ class DataStoryPattern():
             raise ValueError("Data retrieval failed:" +e)
 
     def NarrChangeOT(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate="",narr_type=""):
-       try:
+        try:
             if(df.empty):
                 dataframe=self.retrieveData(cube,dims,meas,hierdims)
             else:
