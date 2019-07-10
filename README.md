@@ -157,15 +157,11 @@ Independent from ```comp_type``` selected, output data will have additional colu
 Available types of comparison ```comp_type```
 |Comp_type                |  Description   |	
   | ------------------------ | -------------|
-  | diffmax| difference with max value related to specific textual value|
-  | diffmean| difference with arithmetic mean related to specific textual values|
-  | diffmin|difference with minimum value related to specific textual value|
-
-|Sort_type                |  Description   |	
-  | ------------------------ | -------------|
   | diffmax|difference with max value related to specific textual value|
   | diffmean|difference with arithmetic mean related to specific textual values|
   | diffmin|difference with minimum value related to specific textual value|
+
+
 
 # ProfileOutliers
 
