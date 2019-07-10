@@ -483,4 +483,90 @@ class DataStoryPattern():
             raise ValueError("Data retrieval from multiple levels failed:" +e)
     
 
+    def AnalysisByCategory(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_for_category="",meas_to_analyse="",analysis_type="min"):
+        """
+        AnalysisByCategory - decomposition of data based on values in dim_for_category with analysis performed on each susbet
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dim_for_category: str
+            dimension, based on which input data will be categorised
+        meas_to_analyse: str
+            numerical property to analyse
+        analysis_type:str
+            type of analysis to perform
+        ...
+        Output
+        -----------
+        As an output, data will be decomposed in a form of a dictionary, where each 
+        subset have values only related to specific value. Such subset will get analysed
+
+        Available values for analysis_type
+            min-> minimum for each category
+            max -> maximum for each category
+            mean -> arithmetical mean per each category
+            sum -> total value per each category
+        """
+        try:
+            if(df.empty):
+                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+            else:
+                dataframe=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+e)
+
+
+        try:
+            if not (dim_for_category): ##If not specified
+                dim_for_category=dims[0]
+
+            uniqueDimValues=dataframe[dim_for_category].unique()
+
+            analysisDict={elem:{analysis_type:0} for elem in uniqueDimValues}
+
+            if(analysis_type=="min"):
+                for dimvalue in uniqueDimValues:
+                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].min()
+                    
+                return analysisDict
+            
+            elif(analysis_type=="max"):
+                for dimvalue in uniqueDimValues:
+                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].max()
+                    
+                return analysisDict
+            
+            elif(analysis_type=="mean"):
+                for dimvalue in uniqueDimValues:
+                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].mean()
+                    
+                return analysisDict
+
+            elif(analysis_type=="sum"):
+                for dimvalue in uniqueDimValues:
+                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
+                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].sum()
+                    
+                return analysisDict
+        
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis "+e)
+
+    
+
 

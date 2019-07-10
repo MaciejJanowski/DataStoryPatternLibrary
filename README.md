@@ -26,6 +26,7 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided
    * [Dissect Factors](#DissectFactors)
    * [Highlight Contrast](#HighlightContrast)
    * [Start Big Drill Down](#StartBigDrillDown)
+   * [Start Small Zoom Out](#StartSmallZoomOut)
 <!--te-->
 # MCounting
 
@@ -242,4 +243,37 @@ As an output, data will be retrieved in a form of a dictionary, where each datas
 ### Output 
 As an output, data will be retrieved in a form of a dictionary, where each dataset will be retrieved from different hierachy level. List will be provided in```hierdim_zoom_out```. Hierachy levels provided by in parameter will automatically sorted in order from most detaile to most general level based on metadata provided.
 
+
+
+
+
+#AnalysisByCategory
+
+  AnalysisByCategory - ecomposition of data based on values in dim_for_category with analysis performed on each susbet
+    
+### Attributes
+ ```python
+ def AnalysisByCategory(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_for_category="",meas_to_analyse="",analysis_type="min"):
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | dim_for_category	       |	```String```         |  Dimension, based on which input data will be categorised
+  | meas_to_analyse	       |	```String```         | Measure, which will be analysed
+  | analysis_type	       |	```String```         | Type of analysis to perform
+ 
+### Output 
+As an output, data will be decomposed in a form of a dictionary, where each subset have values only related to specific value. Such subset will get analysed based on ```analysis_type``` parameter
+
+Available types of analysis ```analysis_type```
+|Analysis_type                |  Description   |	
+  | ------------------------ | -------------|
+  | min| Minimum per each category|
+  | max| Maximum per each category|
+  | mean|Arithmetical mean per each category|
+  | sum|Total value from each category|
 
