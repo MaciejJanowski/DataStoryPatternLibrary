@@ -70,6 +70,8 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided.
    * [Start Big Drill Down](#StartBigDrillDown)
    * [Start Small Zoom Out](#StartSmallZoomOut)
    * [Analysis By Category](#AnalysisByCategory)
+   * [Explore Intersection](#ExploreIntersection)
+   * [Narrating Change Over Time](#NarratingChangeOverTime)
 <!--te-->
 # MCounting
 
@@ -78,7 +80,7 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided.
     
 ### Attributes
  ```python
- MCounting(self,cube="",dims=[],meas=[],hierdims=[],count_type="raw",df=pd.DataFrame() )
+ def MCounting(self,cube="",dims=[],meas=[],hierdims=[],count_type="raw",df=pd.DataFrame() )
  ```
   Parameter                 | Type       | Description   |	
   | :------------------------ |:-------------:| :-------------|
@@ -108,7 +110,7 @@ Based on count_type value
     
 ### Attributes
  ```python
- LTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame())
+ def LTable(self,cube=[],dims=[],meas=[],hierdims=[], columns_to_order="", order_type="asc", number_of_records=20,df=pd.DataFrame())
  ```
   Parameter                 | Type       | Description   |	
   | :------------------------ |:-------------:| :-------------|
@@ -122,7 +124,7 @@ Based on count_type value
   | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
  
 ### Output
-Based on sort_type value
+Based on ```sort_type``` value
 
 |Sort_type                |  Description   |	
   | ------------------------ | -------------|
@@ -153,7 +155,7 @@ Based on sort_type value
 Independent from ```comp_type``` selected, output data will have additional column with numerical column ```meas_to_compare``` processed in specific way.
 
 Available types of comparison ```comp_type```
-|Comp_type                |  Description   |	
+|Sort_type                |  Description   |	
   | ------------------------ | -------------|
   | diffmax| difference with max value related to specific textual value|
   | diffmean| difference with arithmetic mean related to specific textual values|
