@@ -238,6 +238,7 @@ and this key value will be data, where yhis key value was occurring.
 Independent from ```contrast_type``` selected, output data will have additional column with numerical column ```meas_to_contrast``` processed in specific way.
 
 Available types of comparison ```contrast_type```
+
 |Contrast_type                |  Description   |	
   | ------------------------ | -------------|
   | partofwhole| difference with max value related to specific textual value|
