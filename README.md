@@ -124,7 +124,7 @@ Based on count_type value
   | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
  
 ### Output
-Based on ```sort_type``` value
+Based on sort_type value
 
 |Sort_type                |  Description   |	
   | ------------------------ | -------------|
@@ -155,11 +155,16 @@ Based on ```sort_type``` value
 Independent from ```comp_type``` selected, output data will have additional column with numerical column ```meas_to_compare``` processed in specific way.
 
 Available types of comparison ```comp_type```
-|Sort_type                |  Description   |	
+|Comp_type                |  Description   |	
   | ------------------------ | -------------|
   | diffmax| difference with max value related to specific textual value|
   | diffmean| difference with arithmetic mean related to specific textual values|
   | diffmin|difference with minimum value related to specific textual value|
+
+|Sort_type                |  Description   |	
+  | ------------------------ | -------------|
+  | asc|ascending order based on columns provided in ```columns_to_order```|
+  | desc|descending order based on columns provided in ```columns_to_order```|
 
 # ProfileOutliers
 
