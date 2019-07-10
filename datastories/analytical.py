@@ -601,6 +601,38 @@ class DataStoryPattern():
             raise ValueError("Data retrieval failed:" +e)
 
     def NarrChangeOT(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate="",narr_type=""):
+        """
+        NarratingChangeOverTime - presenting difference between two numerical properties (change in time)
+        ...
+        Attributes
+        -----------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        meas_to_narrate: list[str]
+            set of 2 measures, which change will be narrated
+        narr_type: str
+            type of narration to perform
+       ...
+       Output
+       -------------
+        Independent from narr_type selected, output data will have additional column with numerical
+        values processed in specific way.
+        Available comparison types (narr_type):
+            percchange->percentage change between first and second property
+            diffchange->quantitive change between first and second property
+            
+        """
+        
         try:
             if(df.empty):
                 dataframe=self.retrieveData(cube,dims,meas,hierdims)
@@ -619,6 +651,8 @@ class DataStoryPattern():
             elif(narr_type=="diffchange"): ##Numeric difference
                 dataframe["DiffChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])).round(2)
                 return dataframe
+            else:
+                raise ValueError("Wrong narration type: "+narr_type)
         except Exception as e:
             raise ValueError("Narration failed:"+e)
 

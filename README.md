@@ -332,4 +332,26 @@ Available types of analysis ```analysis_type```
 ### Output 
 Pattern will return series of datasets, where each will represent occurence of ```dim_to_explore``` in one cube
 
-#NarratingChangeOT TODO
+# NarratingChangeOverTime
+### Attributes
+ ```python
+ def NarrChangeOT(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate="",narr_type="")
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | meas_to_narrate	       |	```String```         |  Set of 2 measures, which change will be narrated
+  | narr_type	       |	```String```         | Type of narration to perform
+
+### Output 
+Independent from ```narr_type``` selected, output data will have additional column with numerical values processed in specific way.
+
+Available types of analysis ```narr_type```
+|Narr_type                |  Description   |	
+  | ------------------------ | -------------|
+  | percchange| Percentage change between first nad second property|
+  | diffchange| Quantitive change between first and second property|
