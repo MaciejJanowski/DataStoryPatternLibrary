@@ -315,6 +315,7 @@ As an output, data will be retrieved in a form of a dictionary, where each datas
 As an output, data will be decomposed in a form of a dictionary, where each subset have values only related to specific value. Such subset will get analysed based on ```analysis_type``` parameter
 
 Available types of analysis ```analysis_type```
+
 |Analysis_type                |  Description   |	
   | ------------------------ | -------------|
   | min| Minimum per each category|
