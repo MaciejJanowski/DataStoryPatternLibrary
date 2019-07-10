@@ -187,8 +187,8 @@ Based on ```displayType``` parameter data will be displayed with/without ddetect
 Available types of displaying ```displayType```
 |Display_type                |  Description   |	
   | ------------------------ | -------------|
-  | outliers_only| returns rows from dataset where unusual values were detected|
-  | without_outliers| returns dataset with excluded rows where unusual values were detected|
+  | outliers_only|returns rows from dataset where unusual values were detected |
+  | without_outliers|returns dataset with excluded rows where unusual values were detected |
 
 
 # DissectFactors
