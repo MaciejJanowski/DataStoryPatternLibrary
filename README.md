@@ -185,7 +185,7 @@ Pattern analysis using ```python scipy``` library will perform quick exploration
 Based on ```displayType``` parameter data will be displayed with/without ddetected unusual values.
 
 Available types of displaying ```displayType```
-|DisplayType                |  Description   |	
+|Display_type                |  Description   |	
   | ------------------------ | -------------|
   | outliers_only| returns rows from dataset where unusual values were detected|
   | without_outliers| returns dataset with excluded rows where unusual values were detected|
