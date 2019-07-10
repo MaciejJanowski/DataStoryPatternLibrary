@@ -576,34 +576,60 @@ class DataStoryPattern():
         cube_occurences=[] #List of cube where dimension exists
 
 ###Inspection of dimension occurences
-        for cube in self.metaDataDict.keys():
-            if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
-                isHierarchical=True
-                break #If dimension is found once as hierarchical it is hierarchical across all cubes
-
-        if not isHierarchical:
-            for cube in self.metaDataDict.keys():
-                if dim_to_explore in self.metaDataDict[cube]["dimensions"]:
-                    cube_occurences.append(cube) ##
-        else:
+        try:
             for cube in self.metaDataDict.keys():
                 if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
-                    cube_occurences.append(cube)
+                    isHierarchical=True
+                    break #If dimension is found once as hierarchical it is hierarchical across all cubes
 
-        cubesToRetrieveData=cube_occurences
-###Dicitonary per each cube      
-        cubesIntersectDataDict={cube : pd.DataFrame for cube in cubesToRetrieveData}
+            if not isHierarchical:
+                for cube in self.metaDataDict.keys():
+                    if dim_to_explore in self.metaDataDict[cube]["dimensions"]:
+                        cube_occurences.append(cube) ##
+            else:
+                for cube in self.metaDataDict.keys():
+                    if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
+                        cube_occurences.append(cube)
 
+            cubesToRetrieveData=cube_occurences
+            ###Dicitonary per each cube 
+            cubesIntersectDataDict={cube : pd.DataFrame for cube in cubesToRetrieveData}
+
+        except Exception as e:
+            raise ValueError("Wrong dimension specified:" +e)
+     
+       
 ###Retrieve data from each cube, where dimension cna be found
-        for cube in cubesToRetrieveData:
-            dimensions=self.metaDataDict[cube]["dimensions"].keys()
-            #hierdimensions={hierdim: {"selected_level":""} for hierdim in self.metaDataDict[cube]["hierarchical_dimensions"].keys()}
-            measures=self.metaDataDict[cube]["measures"].keys()
+        try:
+            for cube in cubesToRetrieveData:
+                dimensions=self.metaDataDict[cube]["dimensions"].keys()
+                measures=self.metaDataDict[cube]["measures"].keys()
+                cubesIntersectDataDict[cube]=self.retrieveData(cube,dimensions,measures)
+            return cubesIntersectDataDict
+        except Exception as e:
+            raise ValueError("Data retrieval failed:" +e)
 
-            cubesIntersectDataDict[cube]=self.retrieveData(cube,dimensions,measures)
+    def NarrChangeOT(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate="",narr_type=""):
+       try:
+            if(df.empty):
+                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+            else:
+                dataframe=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+e)
+        
+        if len(meas_to_narrate) != 2: #there has to be two measures 
+            raise ValueError("There has to be 2 measures to narrate")
+        try:
 
-
-        return cubesIntersectDataDict
+            if (narr_type=="percchange"): #percentage change
+                dataframe["PercChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])/dataframe[meas_to_narrate[0]] *100).round(2)
+                return dataframe
+            elif(narr_type=="diffchange"): ##Numeric difference
+                dataframe["DiffChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])).round(2)
+                return dataframe
+        except Exception as e:
+            raise ValueError("Narration failed:"+e)
 
 
 
