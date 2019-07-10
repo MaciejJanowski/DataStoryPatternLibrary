@@ -27,6 +27,7 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided
    * [Highlight Contrast](#HighlightContrast)
    * [Start Big Drill Down](#StartBigDrillDown)
    * [Start Small Zoom Out](#StartSmallZoomOut)
+   * [Analysis By Category](#AnalysisByCategory)
 <!--te-->
 # MCounting
 
@@ -244,10 +245,7 @@ As an output, data will be retrieved in a form of a dictionary, where each datas
 As an output, data will be retrieved in a form of a dictionary, where each dataset will be retrieved from different hierachy level. List will be provided in```hierdim_zoom_out```. Hierachy levels provided by in parameter will automatically sorted in order from most detaile to most general level based on metadata provided.
 
 
-
-
-
-#AnalysisByCategory
+# AnalysisByCategory
 
   AnalysisByCategory - ecomposition of data based on values in dim_for_category with analysis performed on each susbet
     

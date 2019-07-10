@@ -563,6 +563,8 @@ class DataStoryPattern():
                     analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].sum()
                     
                 return analysisDict
+            else:
+                raise ValueError("Wrong type of analysis: "+analysis_type)
         
         except Exception as e:
             raise ValueError("Data not eglible for analysis "+e)
