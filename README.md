@@ -23,6 +23,9 @@ Object created allow to query SPARQL endpoint based on JSON meatadat provided
    * [League Table](#LTable)
    * [Internal Comprison](#InternalComparison)
    * [Profile Outliers](#ProfileOutliers)
+   * [Dissect Factors](#DissectFactors)
+   * [Highlight Contrast](#HighlightContrast)
+   * [Start Big Drill Down](#StartBigDrillDown)
 <!--te-->
 # MCounting
 
@@ -162,4 +165,81 @@ Available types of displaying ```displayType```
 As an output, data will be decomposed in a form of a dictionary, where each subset have values only related to specific value.
 Dictionary of subdataset will be constructed as a series of paiers where key per each susbet will values from ```dim_to_dissect```
 and this key value will be data, where yhis key value was occurring.
+
+
+# HighlightContrast
+
+  HighlightContrast - partial difference within values related to one textual column
+    
+### Attributes
+ ```python
+ def HighlightContrast(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast="")
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
+  | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
+  | dim_to_contrast	       |	```String```         | Textual column, from which values will be contrasted
+  | meas_to_contrast	       |	```String```         | Numerical column, which values are contrasted
+  | contrast_type	       |	```String```         | Type of contrast to present
+ 
+### Output 
+Independent from ```contrast_type``` selected, output data will have additional column with numerical column ```meas_to_contrast``` processed in specific way.
+
+Available types of comparison ```contrast_type```
+|Contrast_type                |  Description   |	
+  | ------------------------ | -------------|
+  | partofwhole| difference with max value related to specific textual value|
+  | partofmax| difference with arithmetic mean related to specific textual values|
+  | partofmin|difference with minimum value related to specific textual value|
+
+
+
+
+# StartBigDrillDown
+
+  StartBigDrillDown - data retrieval from multiple hierachical levels.
+
+  This pattern can be only applied to data not stored already in DataFrame
+    
+### Attributes
+ ```python
+ def StartBigDrillDown(self,cube="",dims=[],meas=[],hierdim_drill_down=[])
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdim_drill_down	       |```  dict{hierdim:list[str]} ```        | Hierarchical dimension with list of hierarchy levels to inspect
+  
+
+### Output 
+As an output, data will be retrieved in a form of a dictionary, where each dataset will be retrieved from different hierachy level. List will be provided in```hierdim_drill_down```. Hierachy levels provided by in parameter will automatically sorted in order from most general to most detailed level based on metadata provided.
+
+
+# StartSmallZoomOut
+
+  StartSmallZoomOut - data retrieval from multiple hierachical levels.
+
+  This pattern can be only applied to data not stored already in DataFrame
+    
+### Attributes
+ ```python
+ def StartSmallZoomOut(self,cube="",dims=[],meas=[],hierdim_zoom_out=[])
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | cube	       |```	String     ```   | Cube, which dimensions and measures will be investigated
+  | dims	       |```	  list[String]     ```   | List of dimensions (from cube) to take into investigation
+  | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
+  | hierdim_zoom_out	       |```  dict{hierdim:list[str]} ```        | Hierarchical dimension with list of hierarchy levels to inspect
+  
+
+### Output 
+As an output, data will be retrieved in a form of a dictionary, where each dataset will be retrieved from different hierachy level. List will be provided in```hierdim_zoom_out```. Hierachy levels provided by in parameter will automatically sorted in order from most detaile to most general level based on metadata provided.
+
 

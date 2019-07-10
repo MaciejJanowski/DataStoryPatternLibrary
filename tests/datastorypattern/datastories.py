@@ -11,7 +11,7 @@ class DataStoryPatternLibrary():
     def __init__(self,sparqlEndpoint,jsonmetadata):
         self.sparqlEndpoint=sparqlEndpoint
         self.metaDataDict=jsonmetadata
-
+        
     def retrieveData(self,cube,dims,meas,hierdims=[]):
         __doc__="""
         retrieveData - SPARQL query builder to retrieve data from SPARQL endpoint.

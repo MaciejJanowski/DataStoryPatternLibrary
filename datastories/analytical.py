@@ -343,6 +343,144 @@ class DataStoryPattern():
             raise ValueError("Data not eglible for analysis:"+e)
 
 
+    def HighlightContrast(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
+        """
+        HighlightContrast - partial difference within values related to one textual column
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dim_to_contrast: str
+            textual column, from which values will be contrasted
+        meas_to_contrast: str
+            numerical column, which values are contrasted
+        contrast_type: str
+            type of contrast to present
+
+        ...
+        Output
+        -----------
+        Output data will have additional column with contrast presented.
+
+        Available contrast_type
+            partofwhole->what part in total value is each value. 
+            partofmax->how big part of max value each value is
+            partofmin->how big part of min value each value is
+        """
+        
+        
+        try:
+            if(df.empty):
+                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+            else:
+                dataframe=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+e)
+        
+        try:
+            if(contrast_type=="partofwhole"):
+                dataframe["PartOfWhole"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.sum()).round(2)
+                return dataframe
+            elif(contrast_type=="partofmax"):
+                dataframe["PartOfMax"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.max()).round(2)
+                return dataframe
+            elif(contrast_type=="partofmin"):
+                dataframe["PartOfMin"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
+                return dataframe
+            else:
+                raise ValueError("Wrong contrast_type specified")
+        except Exception as e:
+            raise ValueError("Data not eglible for analysis"+e)
+
+    def StartBigDrillDown(self,cube="",dims=[],meas=[],hierdim_drill_down=[]):
+        """
+        StartBigDrillDown - data retrieval from multiple hierachical levels
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        hierdim_drill_down: dict{hierdim:list[str]}
+            hierarchical dimension with list of hierarchy levels to inspect
+        ...
+        Output
+        -----------
+        As an output, data will be retrieved as a series of dataset retrieved from different hierarchy levels
+        form most general one to most detailed one
+        """
+
+        if not (cube and dims and meas and hierdim_drill_down):
+            raise ValueError("Wrong dimension/measure/cube specified")
+        try:
+            for el in hierdim_drill_down:
+                hierdimLevels=sorted(hierdim_drill_down[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get)
+                hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
+                for dimlevel in hierdimDict.keys():
+                    hierdims={el:{"selected_level":dimlevel}}
+                    hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
+
+            return hierdimDict
+        
+        except Exception as e:
+            raise ValueError("Data retrieval from multiple levels failed:" +e)
+    
+
+    def StartSmallZoomOut(self,cube="",dims=[],meas=[],hierdim_zoom_out=[]):
+        """
+         StartSmallZoomOut - data retrieval from multiple hierachical levels
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        hierdim_zoom_out: dict{hierdim:list[str]}
+            hierarchical dimension with list of hierarchy levels to inspect
+        ...
+        Output
+        -----------
+        As an output, data will be retrieved as a series of dataset retrieved from different hierarchy levels from most detailed
+         one to most general one
+        """
+
+        if not (cube and dims and meas and hierdim_zoom_out):
+            raise ValueError("Wrong dimension/measure/cube specified")
+        try:
+            for el in hierdim_zoom_out:
+                hierdimLevels=sorted(hierdim_zoom_out[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get)
+                hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
+                for dimlevel in hierdimDict.keys():
+                    hierdims={el:{"selected_level":dimlevel}}
+                    hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
+
+            return hierdimDict
+        
+        except Exception as e:
+            raise ValueError("Data retrieval from multiple levels failed:" +e)
     
 
 
