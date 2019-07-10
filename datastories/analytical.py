@@ -566,7 +566,7 @@ class DataStoryPattern():
         isHierarchical=False #Flag for hierarchy type
         cube_occurences=[] #List of cube where dimension exists
 
-###Inspection of dimension occurences
+        ###Inspection of dimension occurences
         try:
             for cube in self.metaDataDict.keys():
                 if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
@@ -590,7 +590,7 @@ class DataStoryPattern():
             raise ValueError("Wrong dimension specified:" +e)
      
        
-###Retrieve data from each cube, where dimension cna be found
+        ###Retrieve data from each cube, where dimension cna be found
         try:
             for cube in cubesToRetrieveData:
                 dimensions=self.metaDataDict[cube]["dimensions"].keys()
