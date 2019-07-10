@@ -570,23 +570,24 @@ class DataStoryPattern():
             raise ValueError("Data not eglible for analysis "+e)
 
     
-    def ExploreIntersection(self, dim_to_explore="", hierdim_to_explore=""):
+    def ExploreIntersection(self, dim_to_explore=""):
 
         isHierarchical=False #Flag for hierarchy type
         cube_occurences=[] #List of cube where dimension exists
+
 ###Inspection of dimension occurences
         for cube in self.metaDataDict.keys():
-            if dim in self.metaDataDict[cube]["hierarchical_dimensions"]:
+            if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
                 isHierarchical=True
                 break #If dimension is found once as hierarchical it is hierarchical across all cubes
 
         if not isHierarchical:
             for cube in self.metaDataDict.keys():
-                if dim in self.metaDataDict[cube]["dimensions"]:
+                if dim_to_explore in self.metaDataDict[cube]["dimensions"]:
                     cube_occurences.append(cube) ##
         else:
             for cube in self.metaDataDict.keys():
-                if dim in self.metaDataDict[cube]["hierarchical_dimensions"]:
+                if dim_to_explore in self.metaDataDict[cube]["hierarchical_dimensions"]:
                     cube_occurences.append(cube)
 
         cubesToRetrieveData=cube_occurences
@@ -603,6 +604,8 @@ class DataStoryPattern():
 
 
         return cubesIntersectDataDict
+
+
 
     
 
