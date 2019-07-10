@@ -163,8 +163,9 @@ Available types of comparison ```comp_type```
 
 |Sort_type                |  Description   |	
   | ------------------------ | -------------|
-  | asc|ascending order based on columns provided in ```columns_to_order```|
-  | desc|descending order based on columns provided in ```columns_to_order```|
+  | diffmax|difference with max value related to specific textual value|
+  | diffmean|difference with arithmetic mean related to specific textual values|
+  | diffmin|difference with minimum value related to specific textual value|
 
 # ProfileOutliers
 
