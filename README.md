@@ -16,7 +16,7 @@ patterns.DataStoryPattern(sparqlendpointurl, jsonmetadata)
 ```
 Object created allow to query SPARQL endpoint based on JSON meatadat provided.
 
-### JSON Template
+# JSON Template
 ```json
 {
     "cube_key" : {
@@ -318,6 +318,18 @@ Available types of analysis ```analysis_type```
   | sum|Total value from each category|
 
 
-# ExploreIntersection TODO
+# ExploreIntersection
+
+
+### Attributes
+ ```python
+ def ExploreIntersection(self, dim_to_explore=""):
+ ```
+  Parameter                 | Type       | Description   |	
+  | :------------------------ |:-------------:| :-------------|
+  | dim_to_explore	       |```	String     ```   |  Dimension, which existence within enpoint is going to be investigated
+ 
+### Output 
+Pattern will return series of datasets, where each will represent occurence of ```dim_to_explore``` in one cube
 
 #NarratingChangeOT TODO

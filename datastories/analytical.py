@@ -550,6 +550,18 @@ class DataStoryPattern():
 
     
     def ExploreIntersection(self, dim_to_explore=""):
+        """
+        Explore intersection - investigating existing of given dimension across provided meta
+
+        ...
+        Attributes
+        ----------
+            dim_to_explore -> dimension, which existence within enpoint is going to be investigated
+        ...
+        Output
+        ---------
+        Pattern will return series of datasets, where each will represent occurence of dim_to_explore in one cube
+        """
 
         isHierarchical=False #Flag for hierarchy type
         cube_occurences=[] #List of cube where dimension exists
