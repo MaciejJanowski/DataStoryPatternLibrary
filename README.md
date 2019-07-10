@@ -161,7 +161,11 @@ Available types of comparison ```comp_type```
   | diffmean|difference with arithmetic mean related to specific textual values|
   | diffmin|difference with minimum value related to specific textual value|
 
-
+|Comp_type                |  Description   |	
+  | ------------------------ | -------------|
+  | diffmax|difference with max value related to specific textual value|
+  | diffmean|difference with arithmetic mean related to specific textual values|
+  | diffmin|difference with minimum value related to specific textual value|
 
 # ProfileOutliers
 
