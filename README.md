@@ -185,6 +185,15 @@ Pattern analysis using ```python scipy``` library will perform quick exploration
 Based on ```displayType``` parameter data will be displayed with/without ddetected unusual values.
 
 Available types of displaying ```displayType```
+
+
+|Comp_type                |  Description   |	
+  | ------------------------ | -------------|
+  | diffmax|difference with max value related to specific textual value|
+  | diffmean|difference with arithmetic mean related to specific textual values|
+  | diffmin|difference with minimum value related to specific textual value|
+
+  
 |Display_type                |  Description   |	
   | ------------------------ | -------------|
   | outliers_only|returns rows from dataset where unusual values were detected |
