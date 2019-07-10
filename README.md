@@ -275,3 +275,7 @@ Available types of analysis ```analysis_type```
   | mean|Arithmetical mean per each category|
   | sum|Total value from each category|
 
+
+# ExploreIntersection TODO
+
+#NarratingChangeOT TODO
