@@ -570,5 +570,40 @@ class DataStoryPattern():
             raise ValueError("Data not eglible for analysis "+e)
 
     
+    def ExploreIntersection(self, dim_to_explore="", hierdim_to_explore=""):
+
+        isHierarchical=False #Flag for hierarchy type
+        cube_occurences=[] #List of cube where dimension exists
+###Inspection of dimension occurences
+        for cube in self.metaDataDict.keys():
+            if dim in self.metaDataDict[cube]["hierarchical_dimensions"]:
+                isHierarchical=True
+                break #If dimension is found once as hierarchical it is hierarchical across all cubes
+
+        if not isHierarchical:
+            for cube in self.metaDataDict.keys():
+                if dim in self.metaDataDict[cube]["dimensions"]:
+                    cube_occurences.append(cube) ##
+        else:
+            for cube in self.metaDataDict.keys():
+                if dim in self.metaDataDict[cube]["hierarchical_dimensions"]:
+                    cube_occurences.append(cube)
+
+        cubesToRetrieveData=cube_occurences
+###Dicitonary per each cube      
+        cubesIntersectDataDict={cube : pd.DataFrame for cube in cubesToRetrieveData}
+
+###Retrieve data from each cube, where dimension cna be found
+        for cube in cubesToRetrieveData:
+            dimensions=self.metaDataDict[cube]["dimensions"].keys()
+            #hierdimensions={hierdim: {"selected_level":""} for hierdim in self.metaDataDict[cube]["hierarchical_dimensions"].keys()}
+            measures=self.metaDataDict[cube]["measures"].keys()
+
+            cubesIntersectDataDict[cube]=self.retrieveData(cube,dimensions,measures)
+
+
+        return cubesIntersectDataDict
+
+    
 
 
