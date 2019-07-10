@@ -186,15 +186,7 @@ Based on ```displayType``` parameter data will be displayed with/without ddetect
 
 Available types of displaying ```displayType```
 
-
-|Comp_type                |  Description   |	
-  | ------------------------ | -------------|
-  | diffmax|difference with max value related to specific textual value|
-  | diffmean|difference with arithmetic mean related to specific textual values|
-  | diffmin|difference with minimum value related to specific textual value|
-
-  
-|Display_type                |  Description   |	
+|DisplayType                |  Description   |	
   | ------------------------ | -------------|
   | outliers_only|returns rows from dataset where unusual values were detected |
   | without_outliers|returns dataset with excluded rows where unusual values were detected |
