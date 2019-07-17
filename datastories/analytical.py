@@ -79,7 +79,7 @@ class DataStoryPattern():
 
         """
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -161,7 +161,7 @@ class DataStoryPattern():
             Amount of records returned will be equal to number_of_records
         """
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -238,7 +238,7 @@ class DataStoryPattern():
             meas_to_compare=meas[0]
 
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -318,7 +318,7 @@ class DataStoryPattern():
         
         """
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -387,7 +387,7 @@ class DataStoryPattern():
         """
         
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -447,7 +447,7 @@ class DataStoryPattern():
             partofmin->how big part of min value each value is
         """ 
         try:
-            if df.empty:
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -606,7 +606,7 @@ class DataStoryPattern():
             sum -> total value per each category
         """
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             elif isinstance(df,pd.DataFrame):
                 data=df
