@@ -80,28 +80,55 @@ class DataStoryPattern():
         """
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
         try:
-            if(count_type=="raw"):
-                return dataframe
-            elif(count_type=="sum"):
-                return dataframe.sum(axis=1, skipna=True)
-            elif(count_type=="mean"):
-                return dataframe.mean(numeric_only=True)
-            elif(count_type=="min"):
-                return dataframe.min(numeric_only=True)
-            elif(count_type=="max"):
-                return dataframe.max(numeric_only=True)
-            elif(count_type=="count"):
-                return dataframe.count()
+            if isinstance(data, pd.DataFrame):
+                if(count_type=="raw"):
+                    return data
+                elif(count_type=="sum"):
+                    return data.sum(axis=1, skipna=True)
+                elif(count_type=="mean"):
+                    return data.mean(numeric_only=True)
+                elif(count_type=="min"):
+                    return data.min(numeric_only=True)
+                elif(count_type=="max"):
+                    return data.max(numeric_only=True)
+                elif(count_type=="count"):
+                    return data.count()
+                else:
+                    raise ValueError("Wrong type of count! :"+count_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if(count_type=="raw"):
+                            data[dictel]=tempdata
+                        elif(count_type=="sum"):
+                            data[dictel]=tempdata.sum(axis=1, skipna=True)
+                        elif(count_type=="mean"):
+                            data[dictel]=tempdata.mean(numeric_only=True)
+                        elif(count_type=="min"):
+                            data[dictel]=tempdata.min(numeric_only=True)
+                        elif(count_type=="max"):
+                            data[dictel]=tempdata.max(numeric_only=True)
+                        elif(count_type=="count"):
+                            data[dictel]=tempdata.count()
+                        else:
+                            raise ValueError("Wrong type of count! :"+count_type)
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                return data
             else:
-                raise ValueError("Wrong type of count! :"+count_type)
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis:" +e)
+            raise Exception("Data not eglible for analysis: "+e)
+                    
 
     def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order=[], order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
@@ -137,20 +164,39 @@ class DataStoryPattern():
         """
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
+
         try:
-            if(order_type=="asc"):
-                return dataframe.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
-            elif(order_type=="desc"):
-                return dataframe.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
+            if isinstance(data, pd.DataFrame):
+                if(order_type=="asc"):
+                    return data.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
+                elif(order_type=="desc"):
+                    return data.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
+                else:
+                    raise ValueError("Wrong order type: "+order_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if(order_type=="asc"):
+                            data[dictel]=tempdata.sort_values(by=columns_to_order,ascending=True).head(number_of_records)
+                        elif(order_type=="desc"):
+                            data[dictel]=tempdata.sort_values(by=columns_to_order, ascending=False).head(number_of_records)
+                        else:
+                            raise ValueError("Wrong order type: "+order_type)  
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                return data
             else:
-                raise ValueError("Wrong order type: "+order_type)
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis:"+e)
+            raise Exception("Data not eglible for analysis: "+e)
 
 
 
@@ -197,30 +243,57 @@ class DataStoryPattern():
 
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
+
         try:
-            if(comp_type=="sum"):
-                return dataframe.groupby(dim_to_compare)[meas_to_compare].sum(axis=1)
-            elif(comp_type=="diffmax"):
-                dataframe["DiffMax"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
-                return dataframe
-            elif(comp_type=="diffmean"):
-                dataframe["DiffMean"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
-                return dataframe
-            elif(comp_type=="diffmin"):
-                dataframe["DiffMin"]=dataframe.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
-                return dataframe
+            if isinstance(data, pd.DataFrame):
+                if(comp_type=="diffsum"):
+                    data["DiffSum"]=data.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.sum())
+                    return data
+                elif(comp_type=="diffmax"):
+                    data["DiffMax"]=data.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+                    return data
+                elif(comp_type=="diffmean"):
+                    data["DiffMean"]=data.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+                    return data
+                elif(comp_type=="diffmin"):
+                    data["DiffMin"]=data.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+                    return data
+                else:
+                    raise ValueError("Wrong type of comparison selected!: "+comp_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if(comp_type=="diffsum"):
+                            tempdata["DiffSum"]=tempdata.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.sum())
+                        elif(comp_type=="diffmax"):
+                            tempdata["DiffMax"]=tempdata.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+                        elif(comp_type=="diffmean"):
+                            tempdata["DiffMean"]=tempdata.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+                        elif(comp_type=="diffmin"):
+                            tempdata["DiffMin"]=tempdata.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+                        else:
+                            raise ValueError("Wrong type of comparison selected!: "+comp_type)
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                    data[dictel]=tempdata
+                return data
             else:
-                raise ValueError("Wrong type of comparison selected!: "+comp_type)
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+e)
+                        
 
 
-    def ProfileOutliers(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), displayType="outliers_only"):
+
+    def ProfileOutliers(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(), display_type="outliers_only"):
         """
         ProfileOutliers - detection of unusual values within data (anomalies)
         ....
@@ -252,25 +325,46 @@ class DataStoryPattern():
         """
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
-        
-        try:
-            noOutliers=dataframe[(np.abs(stats.zscore(dataframe.select_dtypes(exclude=["object"]))) < 3).all(axis=1)]
 
-            outliersDF=pd.concat([dataframe,noOutliers]).drop_duplicates(keep=False, inplace=False)
-            
-            if(displayType=="outliers_only"):
-                return outliersDF
-            elif(displayType=="without_outliers"):
-                return noOutliers
+        try:
+            if isinstance(data, pd.DataFrame):
+                noOutliers=data[(np.abs(stats.zscore(data.select_dtypes(exclude=["object"]))) < 3).all(axis=1)]
+                outliersDF=pd.concat([data,noOutliers]).drop_duplicates(keep=False, inplace=False)
+                if(display_type=="outliers_only"):
+                    return outliersDF
+                elif(display_type=="without_outliers"):
+                    return noOutliers
+                else:
+                    raise ValueError("Wrong type of display parameter!: "+display_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        noOutliers=tempdata[(np.abs(stats.zscore(tempdata.select_dtypes(exclude=["object"]))) < 3).all(axis=1)]
+                        outliersDF=pd.concat([tempdata,noOutliers]).drop_duplicates(keep=False, inplace=False)
+
+                        if(display_type=="outliers_only"):
+                            tempdata=outliersDF
+                        elif(display_type=="without_outliers"):
+                            tempdata=noOutliers
+                        else:
+                            raise ValueError("Wrong type of display selected!: "+display_type)
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                    data[dictel]=tempdata
+                return data
             else:
-                raise ValueError("Wrong display Type:"+ displayType)
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis: " + e)
+            raise Exception("Data not eglible for analysis: "+e)
+
 
 
     def DissectFactors(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_dissect=""):
@@ -302,20 +396,22 @@ class DataStoryPattern():
         
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
-            else:
-                dataframe=df
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
+            else: ##Data has to be in Dataframe if not-> raise error
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
         
         try:
-            uniqueDimValues=dataframe[dim_to_dissect].unique()
+            uniqueDimValues=data[dim_to_dissect].unique()
             #dictionary based on unique values from dimension
             dimValueDFDict={elem : pd.DataFrame for elem in uniqueDimValues}
 
             #decompose data into subset grouped under dim_to_dissect
             for key in dimValueDFDict.keys():
-                dimValueDFDict[key]=dataframe[:][dataframe[dim_to_dissect] == key]
+                dimValueDFDict[key]=data[:][data[dim_to_dissect] == key]
 
             return dimValueDFDict
         except Exception as e:
@@ -356,31 +452,51 @@ class DataStoryPattern():
             partofwhole->what part in total value is each value. 
             partofmax->how big part of max value each value is
             partofmin->how big part of min value each value is
-        """
-        
-        
+        """ 
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
-        
+
         try:
-            if(contrast_type=="partofwhole"):
-                dataframe["PartOfWhole"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.sum()).round(2)
-                return dataframe
-            elif(contrast_type=="partofmax"):
-                dataframe["PartOfMax"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.max()).round(2)
-                return dataframe
-            elif(contrast_type=="partofmin"):
-                dataframe["PartOfMin"]=dataframe.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
-                return dataframe
+            if isinstance(data, pd.DataFrame):
+                if(contrast_type=="partofwhole"):
+                    data["PartOfWhole"]=data.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.sum()).round(2)
+                    return data
+                elif(contrast_type=="partofmax"):
+                    data["PartOfMax"]=data.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.max()).round(2)
+                    return data
+                elif(contrast_type=="partofmin"):
+                    data["PartOfMin"]=data.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
+                    return data
+                else:
+                    raise ValueError("Wrong type of comparison selected!: "+comp_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if(contrast_type=="partofwhole"):
+                            tempdata["PartOfWhole"]=tempdata.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.sum()).round(2)
+                        elif(contrast_type=="partofmax"):
+                            tempdata["PartOfMax"]=tempdata.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.max()).round(2)
+                        elif(contrast_type=="partofmin"):
+                            tempdata["PartOfMin"]=tempdata.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
+                        else:
+                            raise ValueError("Wrong type of Contrast selected!: "+contrast_type)
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                    data[dictel]=tempdata
+                return data
             else:
-                raise ValueError("Wrong contrast_type specified")
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis"+e)
+            raise Exception("Data not eglible for analysis: "+e)
+
 
     def StartBigDrillDown(self,cube="",dims=[],meas=[],hierdim_drill_down=[]):
         """
