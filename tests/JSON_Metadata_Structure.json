@@ -21,20 +21,58 @@
 				"dimension_prefix":"http://data.cso.ie/census-2011/classification/areas/",
 				"dimension_levels":
 				{
-					"CTY":2,
-					"DC":3,
-					"ED":4,
-					"GA":5,
-					"LEA":6,
-					"LT":7,
-					"PA":8,
-					"PR":9,
-					"RA":10,
-					"RE":11,
-					"SA":12,
-					"ST":13
+					"CTY":{
+						"description":"per County",
+						"granularity":2
+					},
+					"DC":
+					{
+						"description":"per Dail Constituency",
+						"granularity":3
+					},
+					"ED":{
+						"description":"per Electoral Division",
+						"granularity":4
+					},
+					"GA":
+					{
+						"description":"per Gaeltacht Area",
+						"granularity":5
+					},
+					"LEA":{
+						"description":"per Local Electoral Area",
+						"granularity":6
+					},
+					"LT":{
+						"description":"per Legal Town and City",
+						"granularity":7
+					},
+					"PA":{
+						"description":"per Dublin Parish",
+						"granularity":8
+					},
+					"PR":{
+						"description":"per Province",
+						"granularity":9
+					},
+					"RA":{
+						"description":"per Regional Authority Area",
+						"granularity":2
+					},
+					"RE":{
+						"description":"per Dioceses",
+						"granularity":11
+					},
+					"SA":{
+						"description":"per Small Area",
+						"granularity":12
+					},
+					"ST":{
+						"description":"per Town/City",
+						"granularity":13
+					}
 				}
-				}
+			}
 			},
 		"measures":{
 			"Population":{
@@ -66,18 +104,56 @@
 				"dimension_prefix":"http://data.cso.ie/census-2011/classification/areas/",
 				"dimension_levels":
 				{
-					"CTY":2,
-					"DC":3,
-					"ED":4,
-					"GA":5,
-					"LEA":6,
-					"LT":7,
-					"PA":8,
-					"PR":9,
-					"RA":10,
-					"RE":11,
-					"SA":12,
-					"ST":13
+					"CTY":{
+						"description":"per County",
+						"granularity":2
+					},
+					"DC":
+					{
+						"description":"per Dail Constituency",
+						"granularity":3
+					},
+					"ED":{
+						"description":"per Electoral Division",
+						"granularity":4
+					},
+					"GA":
+					{
+						"description":"per Gaeltacht Area",
+						"granularity":5
+					},
+					"LEA":{
+						"description":"per Local Electoral Area",
+						"granularity":6
+					},
+					"LT":{
+						"description":"per Legal Town and City",
+						"granularity":7
+					},
+					"PA":{
+						"description":"per Dublin Parish",
+						"granularity":8
+					},
+					"PR":{
+						"description":"per Province",
+						"granularity":9
+					},
+					"RA":{
+						"description":"per Regional Authority Area",
+						"granularity":2
+					},
+					"RE":{
+						"description":"per Dioceses",
+						"granularity":11
+					},
+					"SA":{
+						"description":"per Small Area",
+						"granularity":12
+					},
+					"ST":{
+						"description":"per Town/City",
+						"granularity":13
+					}
 				}
 			}
 		},
@@ -109,18 +185,56 @@
           "dimension_prefix":"http://data.cso.ie/census-2011/classification/areas/",
 		  "dimension_levels":
 		  {
-			"CTY":2,
-			"DC":3,
-			"ED":4,
-			"GA":5,
-			"LEA":6,
-			"LT":7,
-			"PA":8,
-			"PR":9,
-			"RA":10,
-			"RE":11,
-			"SA":12,
-			"ST":13
+			"CTY":{
+				"description":"per County",
+				"granularity":2
+			},
+			"DC":
+			{
+				"description":"per Dail Constituency",
+				"granularity":3
+			},
+			"ED":{
+				"description":"per Electoral Division",
+				"granularity":4
+			},
+			"GA":
+			{
+				"description":"per Gaeltacht Area",
+				"granularity":5
+			},
+			"LEA":{
+				"description":"per Local Electoral Area",
+				"granularity":6
+			},
+			"LT":{
+				"description":"per Legal Town and City",
+				"granularity":7
+			},
+			"PA":{
+				"description":"per Dublin Parish",
+				"granularity":8
+			},
+			"PR":{
+				"description":"per Province",
+				"granularity":9
+			},
+			"RA":{
+				"description":"per Regional Authority Area",
+				"granularity":2
+			},
+			"RE":{
+				"description":"per Dioceses",
+				"granularity":11
+			},
+			"SA":{
+				"description":"per Small Area",
+				"granularity":12
+			},
+			"ST":{
+				"description":"per Town/City",
+				"granularity":13
+			}
 		}
         }
         },

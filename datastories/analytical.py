@@ -475,7 +475,7 @@ class DataStoryPattern():
                     data["PartOfMin"]=data.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
                     return data
                 else:
-                    raise ValueError("Wrong type of comparison selected!: "+comp_type)
+                    raise ValueError("Wrong type of comparison selected!: "+contrast_type)
             elif isinstance(data, dict): ##If input is a dictionary of dataframes
                 for dictel in data:
                     if isinstance(data[dictel], pd.DataFrame):
@@ -526,7 +526,7 @@ class DataStoryPattern():
             raise ValueError("Wrong dimension/measure/cube specified")
         try:
             for el in hierdim_drill_down:
-                hierdimLevels=sorted(hierdim_drill_down[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get)
+                hierdimLevels=sorted(hierdim_drill_down[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get("granularity"))
                 hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
                 for dimlevel in hierdimDict.keys():
                     hierdims={el:{"selected_level":dimlevel}}
@@ -566,7 +566,7 @@ class DataStoryPattern():
             raise ValueError("Wrong dimension/measure/cube specified")
         try:
             for el in hierdim_zoom_out:
-                hierdimLevels=sorted(hierdim_zoom_out[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get)
+                hierdimLevels=sorted(hierdim_zoom_out[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get("granularity"),reverse=True)
                 hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
                 for dimlevel in hierdimDict.keys():
                     hierdims={el:{"selected_level":dimlevel}}
@@ -616,51 +616,49 @@ class DataStoryPattern():
         """
         try:
             if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            elif isinstance(df,pd.DataFrame):
+                data=df
             else:
-                dataframe=df
+                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
 
-
         try:
-            if not (dim_for_category): ##If not specified
-                dim_for_category=dims[0]
+            if isinstance(data, pd.DataFrame):
+                uniqueDimValues=data[dim_for_category].unique()
+                analysisDict={elem:{analysis_type:0} for elem in uniqueDimValues}
+                if(analysis_type=="min"):
+                    for dimvalue in uniqueDimValues:
+                        tempdataframe=data[:][data[dim_for_category] == dimvalue]
+                        analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].min()
+                        
+                    return analysisDict
+                
+                elif(analysis_type=="max"):
+                    for dimvalue in uniqueDimValues:
+                        tempdataframe=data[:][data[dim_for_category] == dimvalue]
+                        analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].max()
+                        
+                    return analysisDict
+                
+                elif(analysis_type=="mean"):
+                    for dimvalue in uniqueDimValues:
+                        tempdataframe=data[:][data[dim_for_category] == dimvalue]
+                        analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].mean()
+                        
+                    return analysisDict
 
-            uniqueDimValues=dataframe[dim_for_category].unique()
-
-            analysisDict={elem:{analysis_type:0} for elem in uniqueDimValues}
-
-            if(analysis_type=="min"):
-                for dimvalue in uniqueDimValues:
-                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
-                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].min()
-                    
-                return analysisDict
-            
-            elif(analysis_type=="max"):
-                for dimvalue in uniqueDimValues:
-                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
-                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].max()
-                    
-                return analysisDict
-            
-            elif(analysis_type=="mean"):
-                for dimvalue in uniqueDimValues:
-                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
-                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].mean()
-                    
-                return analysisDict
-
-            elif(analysis_type=="sum"):
-                for dimvalue in uniqueDimValues:
-                    tempdataframe=dataframe[:][dataframe[dim_for_category] == dimvalue]
-                    analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].sum()
-                    
-                return analysisDict
+                elif(analysis_type=="sum"):
+                    for dimvalue in uniqueDimValues:
+                        tempdataframe=data[:][data[dim_for_category] == dimvalue]
+                        analysisDict[dimvalue][analysis_type]=tempdataframe[meas_to_analyse].sum()
+                        
+                    return analysisDict
+                else:
+                    raise ValueError("Wrong type of analysis: "+analysis_type)
             else:
-                raise ValueError("Wrong type of analysis: "+analysis_type)
-        
+                raise ValueError("Data not in Dataframe")
         except Exception as e:
             raise ValueError("Data not eglible for analysis "+e)
 
