@@ -79,7 +79,7 @@ class DataStoryPattern():
 
         """
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -161,7 +161,7 @@ class DataStoryPattern():
             Amount of records returned will be equal to number_of_records
         """
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -238,7 +238,7 @@ class DataStoryPattern():
             meas_to_compare=meas[0]
 
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -318,7 +318,7 @@ class DataStoryPattern():
         
         """
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -387,7 +387,7 @@ class DataStoryPattern():
         """
         
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -395,17 +395,20 @@ class DataStoryPattern():
             raise ValueError("Wrong dimension/measure given: "+e)
         
         try:
-            uniqueDimValues=data[dim_to_dissect].unique()
-            #dictionary based on unique values from dimension
-            dimValueDFDict={elem : pd.DataFrame for elem in uniqueDimValues}
+            if isinstance(data,pd.DataFrame):
+                uniqueDimValues=data[dim_to_dissect].unique()
+                #dictionary based on unique values from dimension
+                dimValueDFDict={elem : pd.DataFrame for elem in uniqueDimValues}
 
-            #decompose data into subset grouped under dim_to_dissect
-            for key in dimValueDFDict.keys():
-                dimValueDFDict[key]=data[:][data[dim_to_dissect] == key]
+                #decompose data into subset grouped under dim_to_dissect
+                for key in dimValueDFDict.keys():
+                    dimValueDFDict[key]=data[:][data[dim_to_dissect] == key]
 
-            return dimValueDFDict
+                return dimValueDFDict
+            else:
+                raise ValueError("Data not in Dataframe")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis:"+e)
+            raise Exception("Data not eglible for analysis:"+repr(e))
 
 
     def HighlightContrast(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
@@ -444,7 +447,7 @@ class DataStoryPattern():
             partofmin->how big part of min value each value is
         """ 
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
