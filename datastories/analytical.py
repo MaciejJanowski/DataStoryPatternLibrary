@@ -79,12 +79,10 @@ class DataStoryPattern():
 
         """
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else:
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
         try:
@@ -163,12 +161,10 @@ class DataStoryPattern():
             Amount of records returned will be equal to number_of_records
         """
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else:
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
 
@@ -242,12 +238,10 @@ class DataStoryPattern():
             meas_to_compare=meas[0]
 
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else:
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
 
@@ -324,12 +318,10 @@ class DataStoryPattern():
         
         """
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else:
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
 
@@ -395,12 +387,10 @@ class DataStoryPattern():
         """
         
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else: ##Data has to be in Dataframe if not-> raise error
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
         
@@ -454,12 +444,10 @@ class DataStoryPattern():
             partofmin->how big part of min value each value is
         """ 
         try:
-            if(df.empty):
+            if isinstance(df,pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
-            elif isinstance(df,pd.DataFrame):
+            else: 
                 data=df
-            else:
-                raise ValueError("Data not in DataFrame")
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
 
@@ -488,9 +476,9 @@ class DataStoryPattern():
                             tempdata["PartOfMin"]=tempdata.groupby(dim_to_contrast)[meas_to_contrast].transform(lambda x: x/x.min()).round(2)
                         else:
                             raise ValueError("Wrong type of Contrast selected!: "+contrast_type)
+                        data[dictel]=tempdata
                     else: ##If data in dict not in dataframe
                         raise ValueError("Data not in DataFrame")
-                    data[dictel]=tempdata
                 return data
             else:
                 raise ValueError("Format of data not supported")
@@ -748,28 +736,48 @@ class DataStoryPattern():
         """
         
         try:
-            if(df.empty):
-                dataframe=self.retrieveData(cube,dims,meas,hierdims)
-            else:
-                dataframe=df
+            if isinstance(df,pd.DataFrame) and df.empty:
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            else: 
+                data=df
         except Exception as e:
             raise ValueError("Wrong dimension/measure given: "+e)
-        
+
+
         if len(meas_to_narrate) != 2: #there has to be two measures 
             raise ValueError("There has to be 2 measures to narrate")
+
         try:
-
-            if (narr_type=="percchange"): #percentage change
-                dataframe["PercChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])/dataframe[meas_to_narrate[0]] *100).round(2)
-                return dataframe
-            elif(narr_type=="diffchange"): ##Numeric difference
-                dataframe["DiffChange"]=((dataframe[meas_to_narrate[1]]-dataframe[meas_to_narrate[0]])).round(2)
-                return dataframe
+            if isinstance(data, pd.DataFrame):
+                if (narr_type=="percchange"): #percentage change
+                    data["PercChange"]=((data[meas_to_narrate[1]]-data[meas_to_narrate[0]])/data[meas_to_narrate[0]] *100).round(2)
+                    return data
+                elif(narr_type=="diffchange"): ##Numeric difference
+                    data["DiffChange"]=((data[meas_to_narrate[1]]-data[meas_to_narrate[0]])).round(2)
+                    return data
+                else:
+                    raise ValueError("Wrong narration type: "+narr_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if (narr_type=="percchange"): #percentage change
+                            tempdata["PercChange"]=((data[meas_to_narrate[1]]-tempdata[meas_to_narrate[0]])/tempdata[meas_to_narrate[0]] *100).round(2)
+                        elif(narr_type=="diffchange"): ##Numeric difference
+                            tempdata["DiffChange"]=((tempdata[meas_to_narrate[1]]-tempdata[meas_to_narrate[0]])).round(2)
+                        else:
+                            raise ValueError("Wrong type of Contrast selected!: "+ narr_type)
+                        data[dictel]=tempdata
+                    return data
+                else: ##If data in dict not in dataframe
+                    raise ValueError("Data not in DataFrame")
             else:
-                raise ValueError("Wrong narration type: "+narr_type)
+                raise ValueError("Format of data not supported")
         except Exception as e:
-            raise ValueError("Narration failed:"+e)
+            raise Exception("Data not eglible for analysis: "+e)
 
+
+        
 
 
     
