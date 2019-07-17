@@ -84,7 +84,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
         try:
             if isinstance(data, pd.DataFrame):
                 if(count_type=="raw"):
@@ -125,7 +125,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
                     
 
     def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order=[], order_type="asc", number_of_records=20,df=pd.DataFrame()):
@@ -166,7 +166,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
         try:
             if isinstance(data, pd.DataFrame):
@@ -192,7 +192,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
 
 
 
@@ -243,7 +243,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
         try:
             if isinstance(data, pd.DataFrame):
@@ -282,7 +282,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
                         
 
 
@@ -323,7 +323,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
         try:
             if isinstance(data, pd.DataFrame):
@@ -355,7 +355,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
 
 
 
@@ -392,7 +392,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
         
         try:
             if isinstance(data,pd.DataFrame):
@@ -452,7 +452,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
         try:
             if isinstance(data, pd.DataFrame):
@@ -486,7 +486,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
 
 
     def StartBigDrillDown(self,cube="",dims=[],meas=[],hierdim_drill_down=[]):
@@ -526,7 +526,7 @@ class DataStoryPattern():
             return hierdimDict
         
         except Exception as e:
-            raise ValueError("Data retrieval from multiple levels failed:" +e)
+            raise ValueError("Data retrieval from multiple levels failed:" +repr(e))
     
 
     def StartSmallZoomOut(self,cube="",dims=[],meas=[],hierdim_zoom_out=[]):
@@ -566,7 +566,7 @@ class DataStoryPattern():
             return hierdimDict
         
         except Exception as e:
-            raise ValueError("Data retrieval from multiple levels failed:" +e)
+            raise ValueError("Data retrieval from multiple levels failed:" +repr(e))
     
 
     def AnalysisByCategory(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_for_category="",meas_to_analyse="",analysis_type="min"):
@@ -613,7 +613,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Data not in DataFrame")
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
         try:
             if isinstance(data, pd.DataFrame):
@@ -651,7 +651,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Data not in Dataframe")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis "+e)
+            raise ValueError("Data not eglible for analysis "+repr(e))
 
     
     def ExploreIntersection(self, dim_to_explore=""):
@@ -692,7 +692,7 @@ class DataStoryPattern():
             cubesIntersectDataDict={cube : pd.DataFrame for cube in cubesToRetrieveData}
 
         except Exception as e:
-            raise ValueError("Wrong dimension specified:" +e)
+            raise ValueError("Wrong dimension specified:" +repr(e))
      
        
         ###Retrieve data from each cube, where dimension cna be found
@@ -703,7 +703,7 @@ class DataStoryPattern():
                 cubesIntersectDataDict[cube]=self.retrieveData(cube,dimensions,measures)
             return cubesIntersectDataDict
         except Exception as e:
-            raise ValueError("Data retrieval failed:" +e)
+            raise ValueError("Data retrieval failed:" +repr(e))
 
     def NarrChangeOT(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),meas_to_narrate="",narr_type=""):
         """
@@ -744,7 +744,7 @@ class DataStoryPattern():
             else: 
                 data=df
         except Exception as e:
-            raise ValueError("Wrong dimension/measure given: "+e)
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
 
 
         if len(meas_to_narrate) != 2: #there has to be two measures 
@@ -777,7 +777,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+e)
+            raise Exception("Data not eglible for analysis: "+repr(e))
 
 
         
