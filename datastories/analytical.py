@@ -79,7 +79,7 @@ class DataStoryPattern():
 
         """
         try:
-            if isinstance(df,pd.DataFrame) and df.empty:
+            if isinstance(df, pd.DataFrame) and df.empty:
                 data=self.retrieveData(cube,dims,meas,hierdims)
             else: 
                 data=df
@@ -126,7 +126,100 @@ class DataStoryPattern():
                 raise ValueError("Format of data not supported")
         except Exception as e:
             raise Exception("Data not eglible for analysis: "+repr(e))
-                    
+
+
+    def ExternalComparison(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dims_to_compare=[],meas_to_compare="",comp_type=""):
+        """
+        ExternalComparison - comparison of numeric values related to textual values within multiple columns
+        ...
+        Attributes
+        --------------
+        cube: str
+            Cube to retrieve data
+        dims: list[str]
+            list of Strings (dimension names) to retrieve
+        meas: list[str]
+            list of measures to retrieve
+        hierdims: dict{hierdim:{"selected_level":[value]}}
+            hierarchical dimension (if provided) to retrieve data from specific
+            hierarchical level
+        df: dataframe
+            if data is already retrieved from SPARQL endpoint, dataframe itself can
+            be provided
+        dims_to_compare: list[str]
+            dimensions, which textual values are bound to be investigated
+        meas_to_compare: str
+            measure(numeric column), which values related to dim_to_compare 
+            will be processed
+        comp_type: str
+            type of comparison to be performed
+        ...
+        Output
+        -----------
+        Independent from comp_type selected, output data will have additional column with numerical
+        column processed in specific way.
+        Available comparison types (comp_type):
+            diffmax->difference with max value related to specific textual values
+            diffmean->difference with arithmetic mean related to specific textual values
+            diffmin->difference with minimum value related to specific textual values
+
+        """
+
+
+        try:
+            if isinstance(df,pd.DataFrame) and df.empty:
+                data=self.retrieveData(cube,dims,meas,hierdims)
+            else: 
+                data=df
+        except Exception as e:
+            raise ValueError("Wrong dimension/measure given: "+repr(e))
+        
+        if len(dims_to_compare)!=2:
+            raise ValueError("There has to be two dimensions to compare" + dims_to_compare)
+        
+        try:
+            if isinstance(data, pd.DataFrame):
+                if(comp_type=="diffsum"):
+                    data["DiffSum("+str(dims_to_compare).strip("[]")+")"]=data.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.sum())
+                    return data
+                elif(comp_type=="diffmax"):
+                    data["DiffMax("+str(dims_to_compare).strip("[]")+")"]=data.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+                    return data
+                elif(comp_type=="diffavg"):
+                    data["DiffAvg("+str(dims_to_compare).strip("[]")+")"]=data.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+                    return data
+                elif(comp_type=="diffmin"):
+                    data["DiffMin("+str(dims_to_compare).strip("[]")+")"]=data.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+                    return data
+                else:
+                    raise ValueError("Wrong type of comparison selected!: "+comp_type)
+            elif isinstance(data, dict): ##If input is a dictionary of dataframes
+                for dictel in data:
+                    if isinstance(data[dictel], pd.DataFrame):
+                        tempdata=data[dictel]
+                        if(comp_type=="diffsum"):
+                            tempdata["DiffSum("+str(dims_to_compare).strip("[]")+")"]=tempdata.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.sum())
+                        elif(comp_type=="diffmax"):
+                            tempdata["DiffMax("+str(dims_to_compare).strip("[]")+")"]=tempdata.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.max())
+                        elif(comp_type=="diffavg"):
+                            tempdata["DiffAvg("+str(dims_to_compare).strip("[]")+")"]=tempdata.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-round(x.mean(),2))
+                        elif(comp_type=="diffmin"):
+                            tempdata["DiffMin("+str(dims_to_compare).strip("[]")+")"]=tempdata.groupby(dims_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
+                        else:
+                            raise ValueError("Wrong type of comparison selected!: "+comp_type)
+                        data[dictel]=tempdata
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                return data
+            else:
+                raise ValueError("Format of data not supported")
+        except Exception as e:
+            raise Exception("Data not eglible for analysis: "+repr(e))
+
+
+
+
+
 
     def LTable(self,cube="",dims=[],meas=[],hierdims=[], columns_to_order=[], order_type="asc", number_of_records=20,df=pd.DataFrame()):
         """
@@ -275,9 +368,9 @@ class DataStoryPattern():
                             tempdata["DiffMin"]=tempdata.groupby(dim_to_compare)[meas_to_compare].transform(lambda x: x-x.min())
                         else:
                             raise ValueError("Wrong type of comparison selected!: "+comp_type)
+                        data[dictel]=tempdata
                     else: ##If data in dict not in dataframe
                         raise ValueError("Data not in DataFrame")
-                    data[dictel]=tempdata
                 return data
             else:
                 raise ValueError("Format of data not supported")
@@ -348,9 +441,9 @@ class DataStoryPattern():
                             tempdata=noOutliers
                         else:
                             raise ValueError("Wrong type of display selected!: "+display_type)
+                        data[dictel]=tempdata
                     else: ##If data in dict not in dataframe
                         raise ValueError("Data not in DataFrame")
-                    data[dictel]=tempdata
                 return data
             else:
                 raise ValueError("Format of data not supported")
