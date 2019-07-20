@@ -125,7 +125,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for Measurement and Counting analysis: "+repr(e))
 
 
     def ExternalComparison(self,cube=[],dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dims_to_compare=[],meas_to_compare="",comp_type=""):
@@ -214,7 +214,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for External Comparison analysis: "+repr(e))
 
 
 
@@ -285,7 +285,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for League Table analysis: "+repr(e))
 
 
 
@@ -448,7 +448,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for Profile Outliers analysis: "+repr(e))
 
 
 
@@ -501,7 +501,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Data not in Dataframe")
         except Exception as e:
-            raise Exception("Data not eglible for analysis:"+repr(e))
+            raise Exception("Data not eglible for Dissect Factors analysis:"+repr(e))
 
 
     def HighlightContrast(self,cube="",dims=[],meas=[],hierdims=[],df=pd.DataFrame(),dim_to_contrast="",contrast_type="",meas_to_contrast=""):
@@ -579,7 +579,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for Highlight Contrast analysis: "+repr(e))
 
 
     def StartBigDrillDown(self,cube="",dims=[],meas=[],hierdim_drill_down=[]):
@@ -744,7 +744,7 @@ class DataStoryPattern():
             else:
                 raise ValueError("Data not in Dataframe")
         except Exception as e:
-            raise ValueError("Data not eglible for analysis "+repr(e))
+            raise ValueError("Data not eglible for Analysis By Category analysis "+repr(e))
 
     
     def ExploreIntersection(self, dim_to_explore=""):
@@ -864,13 +864,13 @@ class DataStoryPattern():
                         else:
                             raise ValueError("Wrong type of Contrast selected!: "+ narr_type)
                         data[dictel]=tempdata
-                    return data
-                else: ##If data in dict not in dataframe
-                    raise ValueError("Data not in DataFrame")
+                    else: ##If data in dict not in dataframe
+                        raise ValueError("Data not in DataFrame")
+                return data
             else:
                 raise ValueError("Format of data not supported")
         except Exception as e:
-            raise Exception("Data not eglible for analysis: "+repr(e))
+            raise Exception("Data not eglible for Narrating Change Over Time analysis: "+repr(e))
 
 
         
