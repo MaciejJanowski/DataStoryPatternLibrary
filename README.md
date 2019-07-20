@@ -177,16 +177,16 @@ Available types of comparison ```comp_type```
   | meas	       |	    ```  list[String]  ```      | List of measures (from cube) to take into investigation
   | hierdims	       |```  dict{hierdim:{"selected_level":[value]}}  ```        | Hierarchical Dimesion with selected hierarchy level to take into investigation
   | df	       |```	DataFrame      ```    |  DataFrame object, if data is already retrieved from endpoint
-  | displayType	       |	```String```         | What information display are bound to display (with/without anomalies)
+  | display_type	       |	```String```         | What information display are bound to display (with/without anomalies)
 
 ### Output 
 Pattern analysis using ```python scipy``` library will perform quick exploration in serach of unusual values within data.
 
-Based on ```displayType``` parameter data will be displayed with/without ddetected unusual values.
+Based on ```display_type``` parameter data will be displayed with/without ddetected unusual values.
 
-Available types of displaying ```displayType```
+Available types of displaying ```display_type```
 
-|DisplayType                |  Description   |	
+|display_type                |  Description   |	
   | ------------------------ | -------------|
   | outliers_only|returns rows from dataset where unusual values were detected |
   | without_outliers|returns dataset with excluded rows where unusual values were detected |

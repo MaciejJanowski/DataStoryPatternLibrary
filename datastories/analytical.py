@@ -398,7 +398,7 @@ class DataStoryPattern():
         df: dataframe
             if data is already retrieved from SPARQL endpoint, dataframe itself can
             be provided
-        displayType: str
+        display_type: str
             what values are bound to be displayed
         ...
         Output
