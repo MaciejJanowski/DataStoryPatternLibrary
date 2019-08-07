@@ -613,7 +613,7 @@ class DataStoryPattern():
                 hierdimLevels=sorted(hierdim_drill_down[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get("granularity"))
                 hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
                 for dimlevel in hierdimDict.keys():
-                    hierdims={el:{"selected_level":dimlevel}}
+                    hierdims={el:{"selected_level":dimlevel.strip()}}
                     hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
 
             return hierdimDict
@@ -653,7 +653,7 @@ class DataStoryPattern():
                 hierdimLevels=sorted(hierdim_zoom_out[el], key=self.metaDataDict[cube]["hierarchical_dimensions"][el]["dimension_levels"].get("granularity"),reverse=True)
                 hierdimDict={ hier_level: pd.DataFrame for hier_level in hierdimLevels}
                 for dimlevel in hierdimDict.keys():
-                    hierdims={el:{"selected_level":dimlevel}}
+                    hierdims={el:{"selected_level":dimlevel.strip()}}
                     hierdimDict[dimlevel]=self.retrieveData(cube,dims,meas,hierdims)
 
             return hierdimDict
